@@ -45,8 +45,8 @@ How to interpret the output : The resulting image will be generated in result.jp
 * networkx -> To create graphs from the overlapped pixels.
 
 ## Input / Output
-<pre>     <img src="strawberry.jpeg" width="150" height="150">  ---------------------------------->   <img src="final_strawberry.jpeg" width="400" height="400"> </pre>
-<pre>     <img src="green.jpeg" width="150" height="150">  ---------------------------------->   <img src="final_green_512.jpeg" width="400" height="400"> </pre>
+<pre>     <img src="strawberries.gif" width="150" height="150">  ---------------------------------->   <img src="final_strawberry.jpeg" width="400" height="400"> </pre>
+<pre>     <img src="green.gif" width="150" height="150">  ---------------------------------->   <img src="final_green_512.jpeg" width="400" height="400"> </pre>
 
 
 ## Converting problem/solution
