@@ -46,7 +46,7 @@ How to interpret the output : The resulting image will be generated in result.jp
 
 ## Input / Output
 <pre>     <img src="strawberry.jpg" width="150" height="150">  ---------------------------------->   <img src="final_strawberry.jpg" width="400" height="400"> </pre>
-<pre>     <img src="green.jpg" width="150" height="150">  ---------------------------------->   <img src="final_green.jpg" width="400" height="400"> </pre>
+<pre>     <img src="green.jpg" width="150" height="150">  ---------------------------------->   <img src=".code/output/final_green_512.jpg" width="400" height="400"> </pre>
 
 
 ## Converting problem/solution
