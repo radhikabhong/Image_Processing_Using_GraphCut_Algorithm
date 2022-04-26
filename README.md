@@ -33,7 +33,7 @@ The Edmonds-Karp algorithm runs in O(VE2)
 How to install dependencies : `pip install -r requirements.txt`
 
 How to run the code : `python3 .\code\graphcut.py $sample_img_name_path$ $output_img_name_path$ $output_height$ $output_width$`
-eg. `python3 .\code\graphcut.py .\images\input\green.gif result.jpeg 512 512`
+eg. `python3 .\code\graphcut.py .\images\input\green.gif .\images\output\result.jpeg 512 512`
 
 How to interpret the output : The resulting image will be generated in result.jpeg after code execution. This resulting output is a synthesized image from the sample image. The dimensions of this image will be equal to the dimensions specified above (512 * 512).
 
