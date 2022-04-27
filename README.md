@@ -60,7 +60,7 @@ As the algorithm indicates, a graph of the overlapped region between the patches
 ### Intermediate Steps
 The graphs below depict the edges that contribute to the cost of the intermediate phases' minimum cut. Two sets of nodes are returned after performing the Edmonds Karp algorithm. The left image nodes are represented by one, while the right image nodes are represented by the other. These graphs simply show the nodes and their accompanying edges, which are clipped once the method is applied.
 
-Several intermediate graphs were created during the procedure, but the six graphs above adequately depict the graph's trajectory. The initial graphs have a high density since both sections contribute to the minimal cut. However, as we progress, the new image (right) adds more to the seam than the previous one (left).
+Several intermediate graphs were created during the procedure, but the six graphs below adequately depict the graph's trajectory. The initial graphs have a high density since both sections contribute to the minimal cut. However, as we progress, the new image (right) adds more to the seam than the previous one (left).
 <pre>    <img src="Fig2.png" width="600" height="400">     </pre>
 <pre>    <img src="Fig3.jpeg" width="600" height="400">     </pre>
 <pre>    <img src="Fig4.jpeg" width="600" height="400">     </pre>
