@@ -320,12 +320,12 @@ class GraphCut(object):
         nx.draw_networkx(temp_graph)
         #plt.show()
 
-        file = open("cutarray.txt","a")
+        file = open("cutsetarray.txt","a")
         file.write(str(cutset))
         file.close()
 
         adj_matrix = nx.adjacency_matrix(g)
-        file = open("Adjacency Matrix.txt","a")
+        file = open("adjacency_matrix.txt","a")
         file.write(str(adj_matrix))
         file.close()
 
