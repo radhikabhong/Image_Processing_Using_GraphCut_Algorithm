@@ -9,6 +9,8 @@ The overall flow of the process goes as follows:
 * For overlapped images we need to implement the graphcut algorithm on the overlapped pixels for smoothening the edges of the patch.
 * We represent this overlapped region in the form of graph and run edmonds karp minimum cut algorithm over it to ensure these smooth edges and this minimum cut is treated as the boundary for the inclusion of pixels from the overlapped images.
 * This process is repeated until we reach the maximum dimensions of the output image.
+* The boundary for the inclusion of pixels from the overlapped images is set by this minimum cut.
+* We repeat this process until the final image's dimensions are maxed out.
 
 ## Project Implementation
 ### Ford-Fulkerson Algorithm
@@ -50,8 +52,14 @@ How to interpret the output : The resulting image will be generated in result.jp
 
 
 ## Converting problem/solution
+As the algorithm indicates, a graph of the overlapped region between the patches is created using networkx. One such generated graph is displayed below :
+
+### Graph Generation
 <pre>    <img src="Fig1.png" width="600" height="400">        </pre>
 
+Intermediate Steps
+The graphs below depict the edges that contribute to the cost of the intermediate phases' minimum cut. Two sets of nodes are returned after performing the Edmonds Karp algorithm. The left image nodes are represented by one, while the right image nodes are represented by the other. These graphs simply show the nodes and their accompanying edges, which are clipped once the method is applied.
+Several intermediate graphs were created during the procedure, but the six graphs above adequately depict the graph's trajectory. The initial graphs have a high density since both sections contribute to the minimal cut. However, as we progress, the new image (right) adds more to the seam than the previous one (left).
 <pre>    <img src="Fig2.png" width="600" height="400">     </pre>
 <pre>    <img src="Fig3.jpeg" width="600" height="400">     </pre>
 <pre>    <img src="Fig4.jpeg" width="600" height="400">     </pre>
@@ -59,10 +67,19 @@ How to interpret the output : The resulting image will be generated in result.jp
 <pre>    <img src="Fig6.jpeg" width="600" height="400">             </pre>
 <pre>    <img src="Fig7.jpeg" width="600" height="400">             </pre>
 
+## References
 
+https://networkx.org/documentation/stable/reference/index.html
 
+https://www.csee.umbc.edu/~adamb/641/resources/GraphcutTextures.pdf
 
+https://www.cc.gatech.edu/cpl/projects/graphcuttextures/
 
+https://jamieheller.github.io/theory.html#edmondskarp
+
+https://faculty.math.illinois.edu/~mlavrov/docs/482-fall-2019/lecture26.pdf
+
+https://github.com/ErictheSam/Graphcut
 
 
 
