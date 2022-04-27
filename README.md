@@ -50,18 +50,15 @@ How to interpret the output : The resulting image will be generated in result.jp
 
 
 ## Converting problem/solution
-<pre>    <img src="graph_conversion.png" width="600" height="400">        </pre>
+<pre>    <img src="Fig1.png" width="600" height="400">        </pre>
 
-<pre>    <img src="circular_img_plot_1.png" width="600" height="400">     </pre>
-<pre>    <img src="circular_img_plot_2.png" width="600" height="400">     </pre>
-<pre>    <img src="circular_img_plot_4.png" width="600" height="400">     </pre>
-<pre>    <img src="circular_img_plot_7.png" width="600" height="400">     </pre>
-<pre>    <img src="Image_cut_1.png" width="600" height="400">             </pre>
-<pre>    <img src="Image_cut_2.png" width="600" height="400">             </pre>
-<pre>    <img src="Image_cut_3.png" width="600" height="400">             </pre>
-<pre>    <img src="Image_cut_4.png" width="600" height="400">                 </pre>
-<pre>    <img src="Image_cut_5.png" width="600" height="400">                 </pre>
-<pre>    <img src="Image_cut_6.png" width="600" height="400">                 </pre>
+<pre>    <img src="Fig2.png" width="600" height="400">     </pre>
+<pre>    <img src="Fig3.jpeg" width="600" height="400">     </pre>
+<pre>    <img src="Fig4.jpeg" width="600" height="400">     </pre>
+<pre>    <img src="Fig5.jpeg" width="600" height="400">     </pre>
+<pre>    <img src="Fig6.jpeg" width="600" height="400">             </pre>
+<pre>    <img src="Fig7.jpeg" width="600" height="400">             </pre>
+
 
 
 
