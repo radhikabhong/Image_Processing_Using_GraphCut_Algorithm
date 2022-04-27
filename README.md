@@ -68,6 +68,15 @@ Several intermediate graphs were created during the procedure, but the six graph
 <pre>    <img src="Fig6.jpeg" width="600" height="400">             </pre>
 <pre>    <img src="Fig7.jpeg" width="600" height="400">             </pre>
 
+## Generating the correct graph
+The above images indicate the generated graph. The adjacency matrix has been stored in "adjacency_matrix.txt".
+
+## Converting solution to image cut
+The vector of cuts is stored in the file named "cutsetarray.txt".
+
+## Compositing new image into old one
+The above image of final_strawberry.jpeg and final_green_512.jpeg is the resultant file generated from this project.
+
 ## References
 
 https://networkx.org/documentation/stable/reference/index.html
