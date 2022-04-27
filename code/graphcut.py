@@ -197,9 +197,9 @@ class GraphCut(object):
         nb_pixels = [0]
         #print(t)
         self.new[t[0]:t[0]+self.rowPatch,t[1]:t[1]+self.colPatch] = self.pattern[0:self.rowPatch,0:self.colPatch]
-        overlap_corner = self.change_overlap(t)
+        edge_overlap = self.change_overlap(t)
         nb_pixels[0] = np.sum(self.mask[t[0]:t[0]+self.rowPatch,t[1]:t[1]+self.colPatch])
-        #print(nb_pixels,overlap_corner)
+        #print(nb_pixels,edge_overlap)
         g = nx.Graph()
 
         mask_seam = np.zeros((self.rowOverlap, self.colOverlap ),dtype = np.int)
@@ -209,17 +209,17 @@ class GraphCut(object):
 
         for i in range(self.rowOverlap):
             for j in range(self.colOverlap):
-                if(self.mask[overlap_corner[0]+i][overlap_corner[1]+j]==1):
+                if(self.mask[edge_overlap[0]+i][edge_overlap[1]+j]==1):
                     
                     mat_num[i][j] = num
-                    #print(overlap_corner[0]+i,overlap_corner[1]+j,i,j,mat_num[i][j])
+                    #print(edge_overlap[0]+i,edge_overlap[1]+j,i,j,mat_num[i][j])
                     num += 1
         num = 2
 
         for i in range(self.rowOverlap):
             for j in range(self.colOverlap):
-                x_crt = overlap_corner[0]+i
-                y_crt = overlap_corner[1]+j
+                x_crt = edge_overlap[0]+i
+                y_crt = edge_overlap[1]+j
 
                 down = False
                 right = False
@@ -335,8 +335,8 @@ class GraphCut(object):
             l[i] = 1
         for i in range(self.rowOverlap):
             for j in range(self.colOverlap):
-                x_crt = overlap_corner[0] + i
-                y_crt = overlap_corner[1] + j
+                x_crt = edge_overlap[0] + i
+                y_crt = edge_overlap[1] + j
                 if(self.overlap_zone[x_crt][y_crt] != 0):
                     if( l[mat_num[i][j]] == l[0]):
                         self.new[x_crt][y_crt] = self.old[x_crt][y_crt]
@@ -344,8 +344,8 @@ class GraphCut(object):
                     else:
                         mask_seam[i][j] = 2
         #print(mask_seam.shape)
-        self.change_seams(overlap_corner,mask_seam,self.index)
-        self.change_seams_value(overlap_corner,t,mask_seam)
+        self.change_seams(edge_overlap,mask_seam,self.index)
+        self.change_seams_value(edge_overlap,t,mask_seam)
 
         self.old = deepcopy(self.new)
         self.change_masking(t)
