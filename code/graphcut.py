@@ -8,7 +8,7 @@ from edmonds_karp import edmonds_karp
 from matplotlib import pyplot as plt
 import cv2
 
-class Mincut(object):
+class GraphCut(object):
     
     def __init__(self,texture,rows,cols):
         self.overlapCols = 0
@@ -36,7 +36,7 @@ class Mincut(object):
         self.index = 1
     
 
-    def update_mask(self,t):
+    def change_masking(self,t):
         maxi = min(t[0] + self.patchRows, self.imRows)
         maxj = min(t[1] + self.patchCols, self.imCols)
         self.mask[t[0]:maxi,t[1]:maxj] = np.ones((maxi-t[0],maxj-t[1]),dtype=np.int)
@@ -49,7 +49,7 @@ class Mincut(object):
         if(t[1]+self.patchCols > self.border_mask[3]):
             self.border_mask[3] = t[1]+self.patchCols
 
-    def update_init_value_seams(self,corner_overlap, corner,mask_seam):
+    def change_seams_value(self,corner_overlap, corner,mask_seam):
         for i in range(self.patchRows):
             for j in range(self.patchCols):
                 x_crt = corner[0] + i
@@ -61,32 +61,32 @@ class Mincut(object):
                 else:
                     self.init_value_seams[x_crt][y_crt][0] = i
                     self.init_value_seams[x_crt][y_crt][1] = j
-    def init(self):
+    def initialize(self):
         t = [0,0]
         self.old[t[0]:t[0]+self.patchRows,t[1]:t[1]+self.patchCols] = self.texture[0:self.patchRows,0:self.patchCols]
         self.new= deepcopy(self.old)
-        self.update_mask(t)
-        self.update_init_value_seams(t,t,np.ones((self.patchRows,self.patchCols)))
+        self.change_masking(t)
+        self.change_seams_value(t,t,np.ones((self.patchRows,self.patchCols)))
 
-    def num_neighbors_in_mask(self,p):
+    def number_masking(self,p):
         nums = 0
         for i in range(-1,2):
             for j in range(-1,2):
                 if(p[0]+i >= 0 and p[0] < self.imRows and p[1]+j >= 0 and p[1]+j < self.imCols):
-                    if(self.mask[p[0]+i][p[1]+j] == 0):#挨着先前的mask
+                    if(self.mask[p[0]+i][p[1]+j] == 0):
                         nums += 1
         return nums
 
-    def num_neighbors_in_overlap(self,p): #这个用的是
+    def number_overlap(self,p): 
         nums = 0
         for i in range(-1,2):
             for j in range(-1,2):
-                if(p[0]+i >= 0 and p[0] < self.imRows and p[1]+j >= 0 and p[1]+j < self.imCols):#挨着已有的部分
+                if(p[0]+i >= 0 and p[0] < self.imRows and p[1]+j >= 0 and p[1]+j < self.imCols):
                     if(self.overlap_zone[p[0]+i][p[1]+j] == 0):
                         nums += 1
         return nums
 
-    def update_overlap_zone(self,t):
+    def change_overlap(self,t):
         self.overlap_zone = np.zeros((self.imRows,self.imCols),dtype=np.int)
         corner = [0,0]
         self.overlapRows = self.overlapCols = 0
@@ -94,7 +94,7 @@ class Mincut(object):
         n = 0
         for u in range(self.patchRows ):
             for v in range(self.patchCols):
-                if(self.mask[t[0]+u][t[1]+v] == 1): #如果是重合就是+1 
+                if(self.mask[t[0]+u][t[1]+v] == 1): 
                     self.overlap_zone[t[0]+u][t[1]+v] = 1
                     if(first):
                         corner[0] = t[0]+u
@@ -110,14 +110,14 @@ class Mincut(object):
         for u in range(corner[0]-1,corner[0]+self.overlapRows):
             for v in range(corner[1]-1,corner[1]+self.overlapCols):
                 if(self.overlap_zone[u][v] == 1):
-                    if(self.num_neighbors_in_overlap([u,v]) >= 1):#只要有overlap_zone不是1的（另旁的块）
-                        if(self.num_neighbors_in_mask([u,v]) >= 1):
+                    if(self.number_overlap([u,v]) >= 1):
+                        if(self.number_masking([u,v]) >= 1):
                             self.overlap_zone[u][v] = 2
                         else:
                             self.overlap_zone[u][v] = 3
         return corner
 
-    def update_seams(self,corner,mask_seam, patch_index):
+    def change_seams(self,corner,mask_seam, patch_index):
         found = False
         #print(mask_seam.size)
         for i in range(self.overlapRows):
@@ -146,7 +146,7 @@ class Mincut(object):
                             self.seams[corner[0]+i][corner[1]+j][0] = 1
                         found = True
 
-    def entire_patch_matching_placement(self):
+    def patching_placement(self):
         
         patching = np.zeros((self.realRows,self.realCols),dtype = np.float)
         tk = np.zeros((self.realCols, self.patchRows, self.patchCols, 3),dtype = np.float)
@@ -180,7 +180,7 @@ class Mincut(object):
         #print(t)
         return t
 
-    def compute_cost_edge(self,x_crt,y_crt,x_adj,y_adj,A,B):
+    def edge_cost_calculate(self,x_crt,y_crt,x_adj,y_adj,A,B):
         new_crt = B[x_crt][y_crt]
         old_crt = A[x_crt][y_crt]
         new_adj = B[x_adj][y_adj]
@@ -192,12 +192,12 @@ class Mincut(object):
 
     
 
-    def compute_minCut(self,t):
+    def minCut_calculate(self,t):
 
         nb_pixels = [0]
         #print(t)
         self.new[t[0]:t[0]+self.patchRows,t[1]:t[1]+self.patchCols] = self.texture[0:self.patchRows,0:self.patchCols]
-        overlap_corner = self.update_overlap_zone(t)
+        overlap_corner = self.change_overlap(t)
         nb_pixels[0] = np.sum(self.mask[t[0]:t[0]+self.patchRows,t[1]:t[1]+self.patchCols])
         #print(nb_pixels,overlap_corner)
         g = nx.Graph()
@@ -291,7 +291,7 @@ class Mincut(object):
                         x_adj = x_crt + 1
                         y_adj = y_crt
                         #print(x_crt,x_adj,y_crt,y_adj, self.old[x_crt][y_crt],self.old[x_adj][y_adj],self.new[x_crt][y_crt],self.new[x_adj][y_adj],self.texture[x_crt-t[0]][y_crt-t[1]])
-                        cost = self.compute_cost_edge(x_crt,y_crt,x_adj,y_adj,self.old,self.new)
+                        cost = self.edge_cost_calculate(x_crt,y_crt,x_adj,y_adj,self.old,self.new)
                         #print(cost)
                         g.add_edge(mat_num[i][j],mat_num[i+1][j],capacity=cost)
 
@@ -299,10 +299,10 @@ class Mincut(object):
                         x_adj = x_crt
                         y_adj = y_crt + 1
                         
-                        cost = self.compute_cost_edge(x_crt,y_crt,x_adj,y_adj,self.old,self.new)
+                        cost = self.edge_cost_calculate(x_crt,y_crt,x_adj,y_adj,self.old,self.new)
                         g.add_edge(mat_num[i][j],mat_num[i][j+1],capacity=cost)
 
-                    if(self.overlap_zone[x_crt][y_crt] == 2):#是和谁连着的？
+                    if(self.overlap_zone[x_crt][y_crt] == 2):
                         g.add_edge(mat_num[i][j],1,capacity=1<<20)
                     if(self.overlap_zone[x_crt][y_crt] == 3):
                         g.add_edge(0,mat_num[i][j],capacity=1<<20)
@@ -344,28 +344,28 @@ class Mincut(object):
                     else:
                         mask_seam[i][j] = 2
         #print(mask_seam.shape)
-        self.update_seams(overlap_corner,mask_seam,self.index)
-        self.update_init_value_seams(overlap_corner,t,mask_seam)
+        self.change_seams(overlap_corner,mask_seam,self.index)
+        self.change_seams_value(overlap_corner,t,mask_seam)
 
         self.old = deepcopy(self.new)
-        self.update_mask(t)
+        self.change_masking(t)
         self.overlap_zone = np.zeros((self.imRows,self.imCols),dtype=np.int)
         self.index += 1
     
-    def patch(self):
-        self.init()
+    def patching_func(self):
+        self.initialize()
         x = random.randint( int(1*self.patchRows/3), int(2*self.patchRows/3))
         y = 0
         while(y < self.realCols):
             while(x < self.realRows):
-                self.compute_minCut([x,y])
+                self.minCut_calculate([x,y])
                 x += random.randint( int(1*self.patchRows/3), int(2*self.patchRows/3))
             y += random.randint( int(2*self.patchCols/3), int(2*self.patchCols/3))
             x = 0
         for i in range(5):
             #print(i)
-            t = self.entire_patch_matching_placement()
-            self.compute_minCut(t)
+            t = self.patching_placement()
+            self.minCut_calculate(t)
         return self.new[0:self.realRows,0:self.realCols]
 
 
@@ -379,8 +379,8 @@ if __name__ == '__main__':
     img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
 
     a = np.array(img,dtype=np.int)[:,:,0:3]
-    mincut = Mincut(a,int(sys.argv[3]),int(sys.argv[4]))
+    graphcut = GraphCut(a,int(sys.argv[3]),int(sys.argv[4]))
 
-    result = mincut.patch()
+    result = graphcut.patching_func()
     rst = result.astype('uint8')
     imageio.imwrite(sys.argv[2],rst)
